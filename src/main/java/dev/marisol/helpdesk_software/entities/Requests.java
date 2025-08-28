@@ -1,7 +1,10 @@
 package dev.marisol.helpdesk_software.entities;
 
+import dev.marisol.helpdesk_software.enums.RequestStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -9,6 +12,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "requests")
+
 
 public class Requests{
 
@@ -21,6 +25,10 @@ public class Requests{
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private RequestStatus status = RequestStatus.PENDING;
 
     public Requests(){
     }
@@ -50,3 +58,5 @@ public class Requests{
     }
 
 }
+
+
