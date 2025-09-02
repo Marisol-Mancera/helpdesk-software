@@ -99,6 +99,10 @@ public class RequestEntity{
         this.updatedAt = updatedAt;
     }
 
+     public void setStatus(RequestStatus status) {
+        this.status = status;
+    }
+
 }
 
 //protected para que no se puedan modificar desde fuera

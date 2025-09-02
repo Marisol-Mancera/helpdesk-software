@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import dev.marisol.helpdesk_software.enums.RequestStatus;
-import dev.marisol.helpdesk_software.enums.RequestStatus;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -36,5 +35,15 @@ public class RequestEntityTest {
         RequestEntity r = new RequestEntity();
 
         assertThat(r.getStatus(), is(RequestStatus.PENDING));
+    }
+
+    @Test
+    public void shouldChangeStatusToAttended(){
+
+        RequestEntity r = new RequestEntity();
+
+        r.setStatus(RequestStatus.ATTENDED);
+
+        assertThat(r.getStatus(), is(RequestStatus.ATTENDED));
     }
 }
