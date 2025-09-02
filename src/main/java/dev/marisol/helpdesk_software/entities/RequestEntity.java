@@ -18,7 +18,7 @@ import jakarta.persistence.Table;
 @Table(name = "requests")
 
 
-public class Requests{
+public class RequestEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +40,7 @@ public class Requests{
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-    public Requests(){
+    public RequestEntity(){
     }
 
     @PrePersist

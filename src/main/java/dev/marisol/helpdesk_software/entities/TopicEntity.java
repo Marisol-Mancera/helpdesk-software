@@ -10,7 +10,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "topics")
 
-public class Topics {
+public class TopicEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +22,7 @@ public class Topics {
     @Column(nullable = false)
     private boolean active = true;
 
-    public Topics() {
+    public TopicEntity() {
     }
 
     public long getId(){
