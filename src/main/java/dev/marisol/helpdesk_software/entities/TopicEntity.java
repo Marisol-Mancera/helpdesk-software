@@ -38,7 +38,9 @@ public class TopicEntity {
     }
 
     public void setName(String name){
-        this.name = name;
+        if (name == null){
+            throw new NullPointerException("Topic name can not be null");
+        } this.name = name;
     }
 
     public boolean isActive(){

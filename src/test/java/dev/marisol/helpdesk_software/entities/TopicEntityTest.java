@@ -3,6 +3,7 @@ package dev.marisol.helpdesk_software.entities;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -21,4 +22,11 @@ public class TopicEntityTest {
         assertThat(t.getName(),is(equalTo("Hardware")));
         assertThat(t.isActive(), is(true));
     }
+
+    @Test
+    public void shouldThrowExceptionWhenNameIsNull() {
+    TopicEntity t = new TopicEntity();
+    assertThrows(NullPointerException.class, () -> t.setName(null));
+}
+
 }
