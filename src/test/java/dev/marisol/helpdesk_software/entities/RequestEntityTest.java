@@ -7,15 +7,14 @@ import dev.marisol.helpdesk_software.enums.RequestStatus;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-
 public class RequestEntityTest {
 
     @BeforeEach
     public void setUp() {
-    
+
     }
-    
-    @Test 
+
+    @Test
     public void shouldInitializeWithSetters() {
 
         RequestEntity r = new RequestEntity();
@@ -30,7 +29,7 @@ public class RequestEntityTest {
     }
 
     @Test
-    public void shouldStartWithPendingStatus(){
+    public void shouldStartWithPendingStatus() {
 
         RequestEntity r = new RequestEntity();
 
@@ -38,12 +37,26 @@ public class RequestEntityTest {
     }
 
     @Test
-    public void shouldChangeStatusToAttended(){
+    public void shouldChangeStatusToAttended() {
 
         RequestEntity r = new RequestEntity();
 
         r.setStatus(RequestStatus.ATTENDED);
 
         assertThat(r.getStatus(), is(RequestStatus.ATTENDED));
+    }
+
+    @Test
+    public void shouldAssignAndReturnTopicEntity() {
+
+        TopicEntity topic = new TopicEntity();
+        topic.setName("Hardware");
+        topic.setActive(true);
+
+        RequestEntity r = new RequestEntity();
+
+        r.setTopic(topic);
+        
+        assertThat(r.getTopic(),is(topic));
     }
 }

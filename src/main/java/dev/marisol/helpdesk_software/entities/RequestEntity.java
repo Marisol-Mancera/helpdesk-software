@@ -40,6 +40,8 @@ public class RequestEntity{
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
+    private TopicEntity topic;
+
     public RequestEntity(){
     }
 
@@ -87,6 +89,10 @@ public class RequestEntity{
         return createdAt;
     }
 
+    public TopicEntity getTopic() {
+        return topic;
+    }
+
     protected void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
@@ -101,6 +107,10 @@ public class RequestEntity{
 
      public void setStatus(RequestStatus status) {
         this.status = status;
+    }
+
+    public void setTopic(TopicEntity topic) {
+        this.topic = topic;
     }
 
 }
