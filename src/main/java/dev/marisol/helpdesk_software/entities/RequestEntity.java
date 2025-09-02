@@ -75,6 +75,10 @@ public class RequestEntity{
         return description;
     }
 
+    public RequestStatus getStatus() {
+        return status;
+    }
+
     public void setDescription(String description) {
         this.description = description;
     }

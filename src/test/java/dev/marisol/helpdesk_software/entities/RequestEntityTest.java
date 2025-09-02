@@ -1,11 +1,20 @@
 package dev.marisol.helpdesk_software.entities;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import dev.marisol.helpdesk_software.enums.RequestStatus;
+import dev.marisol.helpdesk_software.enums.RequestStatus;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 
 public class RequestEntityTest {
+
+    @BeforeEach
+    public void setUp() {
+    
+    }
     
     @Test 
     public void shouldInitializeWithSetters() {
@@ -19,5 +28,13 @@ public class RequestEntityTest {
         assertThat(r.getId(), is(equalTo(1L)));
         assertThat(r.getApplicantName(), is(equalTo("María")));
         assertThat(r.getDescription(), is(equalTo("No enciende el pc")));
+    }
+
+    @Test
+    public void shouldStartWithPendingStatus(){
+
+        RequestEntity r = new RequestEntity();
+
+        assertThat(r.getStatus(), is(RequestStatus.PENDING));
     }
 }
