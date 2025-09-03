@@ -7,11 +7,11 @@ import dev.marisol.helpdesk_software.enums.RequestStatus;
 import dev.marisol.helpdesk_software.repository.RequestRepository;
 
 @Service
-public class RequestService implements IRequestService {
+public class RequestServiceImpl implements IRequestService {
 
     private final RequestRepository requestRepository;
 
-    public RequestService(RequestRepository requestRepository) { 
+    public RequestServiceImpl(RequestRepository requestRepository) { 
         this.requestRepository = requestRepository; 
     }
 
