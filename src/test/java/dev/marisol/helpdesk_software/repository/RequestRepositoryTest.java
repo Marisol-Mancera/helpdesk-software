@@ -84,4 +84,26 @@ public class RequestRepositoryTest {
         assertThat(r.getCreatedAt(), is(equalTo(originalCreated)));
         assertThat(r.getUpdatedAt().isAfter(originalUpdated), is(true));
     }
+
+    @Test
+    @DisplayName("should  save a Request and retrieve it by id")
+    public void shouldSaveAndFindById(){
+        
+        RequestEntity r = new RequestEntity();
+
+        r.setApplicantName("Ana");
+        r.setDescription("Problema con WiFi");
+        r.setTopic(topic);
+        RequestEntity stored = requestRepository.save(r);
+        entityManager.flush();
+
+        Long id = stored.getId();
+        RequestEntity found = requestRepository.findById(id).orElseThrow();
+
+        assertThat(stored.getId(), notNullValue());
+        assertThat(found.getId(), is(equalTo(stored.getId())));
+        assertThat(found.getApplicantName(), is(equalTo("Ana")));
+        assertThat(found.getDescription(), is(equalTo("Problema con WiFi")));
+        assertThat(found.getTopic().getId(), is(equalTo(topic.getId())));
+    }
 }
