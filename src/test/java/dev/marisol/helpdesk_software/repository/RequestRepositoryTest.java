@@ -5,8 +5,12 @@ import dev.marisol.helpdesk_software.enums.RequestStatus;
 
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -57,5 +61,27 @@ public class RequestRepositoryTest {
         assertThat(r.getCreatedAt(), notNullValue());
         assertThat(r.getUpdatedAt(), notNullValue());
         assertThat(r.getStatus(), is(RequestStatus.PENDING));
+    }
+
+    @Test
+    @DisplayName("Should update updateAt when modify")
+    public void shouldUpdateWhenModify(){
+
+        RequestEntity r = new RequestEntity();
+
+        r.setApplicantName("Carlos");
+        r.setDescription("Pantalla rota");
+        r.setTopic(topic);
+        requestRepository.save(r);
+        entityManager.flush();
+        LocalDateTime originalCreated = r.getCreatedAt();
+        LocalDateTime originalUpdated = r.getUpdatedAt();
+
+        r.setDescription("Pantalla rota - cambiado");
+        requestRepository.save(r);
+        entityManager.flush();
+
+        assertThat(r.getCreatedAt(), is(equalTo(originalCreated)));
+        assertThat(r.getUpdatedAt().isAfter(originalUpdated), is(true));
     }
 }
