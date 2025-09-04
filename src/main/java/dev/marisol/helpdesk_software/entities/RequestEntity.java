@@ -47,6 +47,10 @@ public class RequestEntity{
     @JoinColumn(name = "topic_id", nullable = false)
     private TopicEntity topic;
 
+    private String attendedBy;
+    
+    private LocalDateTime attendedAt;
+
     public RequestEntity(){
     }
 
@@ -106,6 +110,14 @@ public class RequestEntity{
         return updatedAt;
     }
 
+     public String getAttendedBy() {
+        return attendedBy;
+    }
+
+    public LocalDateTime getAttendedAt() {
+        return attendedAt;
+    }
+
     protected void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
@@ -116,6 +128,14 @@ public class RequestEntity{
 
     public void setTopic(TopicEntity topic) {
         this.topic = topic;
+    }
+
+    public void setAttendedBy(String attendedBy) {
+        this.attendedBy = attendedBy;
+    }
+
+    public void setAttendedAt(LocalDateTime attendedAt) {
+        this.attendedAt = attendedAt;
     }
 
 }
