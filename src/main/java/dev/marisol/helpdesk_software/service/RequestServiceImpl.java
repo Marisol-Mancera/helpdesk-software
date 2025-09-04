@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 
+import dev.marisol.helpdesk_software.dtos.RequestDTORequest;
+import dev.marisol.helpdesk_software.dtos.RequestDTOResponse;
 import dev.marisol.helpdesk_software.entities.RequestEntity;
 import dev.marisol.helpdesk_software.enums.RequestStatus;
 import dev.marisol.helpdesk_software.exceptions.RequestConflictException;
@@ -43,4 +45,10 @@ public class RequestServiceImpl implements IRequestService {
 
         }
     }
+
+    @Override
+    public RequestDTOResponse create(RequestDTORequest dto) {
+        return null;
+    }
+
 }

@@ -4,10 +4,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import dev.marisol.helpdesk_software.dtos.RequestDTORequest;
+import dev.marisol.helpdesk_software.dtos.RequestDTOResponse;
 import dev.marisol.helpdesk_software.service.IRequestService;
 
 @RestController
@@ -30,5 +34,14 @@ public class RequestController {
     @PatchMapping("/{id}/attend")
     public ResponseEntity<Void> attend(@PathVariable Long id, @RequestParam String technicianName) {
         requestService.markAsAttended(id, technicianName); return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping
+    public ResponseEntity<RequestDTOResponse> create(@RequestBody RequestDTORequest dto) {
+        RequestDTOResponse created = requestService.create(dto);
+        if (created == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.status(201).body(created);
     }
 }
