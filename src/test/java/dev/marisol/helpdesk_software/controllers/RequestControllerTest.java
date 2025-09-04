@@ -6,26 +6,43 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import dev.marisol.helpdesk_software.exceptions.RequestNotFoundException;
 import dev.marisol.helpdesk_software.service.IRequestService;
 
 @WebMvcTest(controllers = RequestController.class)
 public class RequestControllerTest {
 
+    @Autowired
+    private MockMvc mockMvc;
 
-@Autowired private MockMvc mockMvc;
+    @MockitoBean
+    private IRequestService requestService;
 
-@MockitoBean private IRequestService requestService;
+    @Test
+    @DisplayName("DELETE should response 204 when request is ATTENDED")
+    public void deleteShouldReturn204WhenAttended() throws Exception {
 
-@Test
-@DisplayName("DELETE should response 204 when request is ATTENDED")
-public void deleteShouldReturn204WhenAttended() throws Exception{
-    
-    mockMvc.perform(delete("/api/v1/requests/{id}", 1L))
-    .andExpect(status().isNoContent());
-}
+        mockMvc.perform(delete("/api/v1/requests/{id}", 1L))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @DisplayName("DELETE debe responder 404 cuando el id no existe")
+    public void deleteShouldReturn404WhenNotFound() throws Exception {
+
+        doThrow(new RequestNotFoundException("Solicitud no encontrada"))
+                .when(requestService).deleteIfAttended(99L);
+
+        mockMvc.perform(delete("/api/v1/requests/{id}", 99L))
+                .andExpect(status().isNotFound());
+    }
+
 }
