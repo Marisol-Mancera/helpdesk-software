@@ -90,43 +90,57 @@ public class RequestControllerTest {
                 when(requestService.create(any(
                                 RequestDTORequest.class))).thenReturn(created);
                 MockHttpServletResponse response = mockMvc.perform(post("/api/v1/requests")
-                .contentType("application/json")
-                .content(json))
-                .andExpect(status().isCreated())
-                .andReturn()
-                .getResponse();
+                                .contentType("application/json")
+                                .content(json))
+                                .andExpect(status().isCreated())
+                                .andReturn()
+                                .getResponse();
 
-                assertThat(response.getContentAsString(),containsString("María"));
-                assertThat(response.getContentAsString(),containsString("PENDING"));
+                assertThat(response.getContentAsString(), containsString("María"));
+                assertThat(response.getContentAsString(), containsString("PENDING"));
         }
 
         @Test
         @DisplayName("POST should return 400 when applicantName is empty")
         public void postShouldReturn400WhenApplicantNameIsEmpty() throws Exception {
 
-            RequestDTORequest dto = new RequestDTORequest("", 1L, "No enciende el PC");
-            String json = mapper.writeValueAsString(dto);
-            mockMvc.perform(post("/api/v1/requests")
-            .contentType("application/json")
-            .content(json))
-            .andExpect(status().isBadRequest());
-}
+                RequestDTORequest dto = new RequestDTORequest("", 1L, "No enciende el PC");
+                String json = mapper.writeValueAsString(dto);
+                mockMvc.perform(post("/api/v1/requests")
+                                .contentType("application/json")
+                                .content(json))
+                                .andExpect(status().isBadRequest());
+        }
 
         @Test
         @DisplayName("POST should return 400 when topicId is null")
         public void postShouldReturn400WhenTopicIdIsNull() throws Exception {
-        //DTO inválido (topicId nulo)
-        RequestDTORequest dto = new RequestDTORequest("María", null, "No enciende el PC");
-        String json = mapper.writeValueAsString(dto);
 
-        //debe ser 400 y NO invocar al service
-        mockMvc.perform(post("/api/v1/requests")
-            .contentType("application/json")
-            .content(json))
-        .andExpect(status().isBadRequest());
+                RequestDTORequest dto = new RequestDTORequest("María", null, "No enciende el PC");
+                String json = mapper.writeValueAsString(dto);
 
-    verify(requestService, never()).create(any(RequestDTORequest.class));
-}
+                mockMvc.perform(post("/api/v1/requests")
+                                .contentType("application/json")
+                                .content(json))
+                                .andExpect(status().isBadRequest());
 
+                verify(requestService, never()).create(any(RequestDTORequest.class));
+        }
+
+        @Test
+        @DisplayName("POST should return 404 when topicId does not exist")
+        public void postShouldReturn404WhenTopicIdDoesNotExist() throws Exception {
+
+                RequestDTORequest dto = new RequestDTORequest("María", 999L, "No enciende el PC");
+                String json = mapper.writeValueAsString(dto);
+
+                when(requestService.create(any(RequestDTORequest.class)))
+                                .thenThrow(new RequestNotFoundException("Topic not found"));
+
+                mockMvc.perform(post("/api/v1/requests")
+                                .contentType("application/json")
+                                .content(json))
+                                .andExpect(status().isNotFound());
+        }
 
 }
