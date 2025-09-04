@@ -143,4 +143,21 @@ public class RequestControllerTest {
                                 .andExpect(status().isNotFound());
         }
 
+        @Test
+        @DisplayName("POST should return 409 when request creation conflicts")
+        public void postShouldReturn409WhenConflictOccurs() throws Exception {
+
+                RequestDTORequest dto = new RequestDTORequest("María", 1L, "Duplicado de prueba");
+        String json = mapper.writeValueAsString(dto);
+
+        when(requestService.create(any(RequestDTORequest.class)))
+            .thenThrow(new RequestConflictException("Request already exists"));
+
+        mockMvc.perform(post("/api/v1/requests")
+            .contentType("application/json")
+            .content(json))
+            .andExpect(status().isConflict());
+}
+
+
 }
