@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import dev.marisol.helpdesk_software.dtos.RequestDTORequest;
 import dev.marisol.helpdesk_software.dtos.RequestDTOResponse;
 import dev.marisol.helpdesk_software.service.IRequestService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/requests")
@@ -37,7 +38,7 @@ public class RequestController {
     }
 
     @PostMapping
-    public ResponseEntity<RequestDTOResponse> create(@RequestBody RequestDTORequest dto) {
+    public ResponseEntity<RequestDTOResponse> create( @Valid @RequestBody RequestDTORequest dto) {
         RequestDTOResponse created = requestService.create(dto);
         if (created == null) {
             return ResponseEntity.noContent().build();

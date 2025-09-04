@@ -98,4 +98,16 @@ public class RequestControllerTest {
                 assertThat(response.getContentAsString(),containsString("PENDING"));
         }
 
+        @Test
+        @DisplayName("POST should return 400 when applicantName is empty")
+        public void postShouldReturn400WhenApplicantNameIsEmpty() throws Exception {
+            RequestDTORequest dto = new RequestDTORequest("", 1L, "No enciende el PC");
+            String json = mapper.writeValueAsString(dto);
+            mockMvc.perform(post("/api/v1/requests")
+            .contentType("application/json")
+            .content(json))
+            .andExpect(status().isBadRequest());
+}
+
+
 }
