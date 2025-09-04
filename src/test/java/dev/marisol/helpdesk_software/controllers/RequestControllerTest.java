@@ -18,6 +18,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 
@@ -101,12 +103,29 @@ public class RequestControllerTest {
         @Test
         @DisplayName("POST should return 400 when applicantName is empty")
         public void postShouldReturn400WhenApplicantNameIsEmpty() throws Exception {
+
             RequestDTORequest dto = new RequestDTORequest("", 1L, "No enciende el PC");
             String json = mapper.writeValueAsString(dto);
             mockMvc.perform(post("/api/v1/requests")
             .contentType("application/json")
             .content(json))
             .andExpect(status().isBadRequest());
+}
+
+        @Test
+        @DisplayName("POST should return 400 when topicId is null")
+        public void postShouldReturn400WhenTopicIdIsNull() throws Exception {
+        //DTO inválido (topicId nulo)
+        RequestDTORequest dto = new RequestDTORequest("María", null, "No enciende el PC");
+        String json = mapper.writeValueAsString(dto);
+
+        //debe ser 400 y NO invocar al service
+        mockMvc.perform(post("/api/v1/requests")
+            .contentType("application/json")
+            .content(json))
+        .andExpect(status().isBadRequest());
+
+    verify(requestService, never()).create(any(RequestDTORequest.class));
 }
 
 
