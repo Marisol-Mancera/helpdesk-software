@@ -14,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import dev.marisol.helpdesk_software.exceptions.RequestConflictException;
 import dev.marisol.helpdesk_software.exceptions.RequestNotFoundException;
 import dev.marisol.helpdesk_software.service.IRequestService;
 
@@ -35,7 +36,7 @@ public class RequestControllerTest {
     }
 
     @Test
-    @DisplayName("DELETE debe responder 404 cuando el id no existe")
+    @DisplayName("DELETE should respnse 404 when id doesn't exist")
     public void deleteShouldReturn404WhenNotFound() throws Exception {
 
         doThrow(new RequestNotFoundException("Solicitud no encontrada"))
@@ -43,6 +44,17 @@ public class RequestControllerTest {
 
         mockMvc.perform(delete("/api/v1/requests/{id}", 99L))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("DELETE  should respnse 409 when Request is PENDING")
+    public void deleteShouldReturn409WhenPending() throws Exception {
+
+        doThrow(new RequestConflictException("Solo se pueden eliminar solicitudes atendidas"))
+                .when(requestService).deleteIfAttended(1L);
+
+        mockMvc.perform(delete("/api/v1/requests/{id}", 1L))
+                .andExpect(status().isConflict());
     }
 
 }
