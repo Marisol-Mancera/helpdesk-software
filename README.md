@@ -106,7 +106,7 @@ src/test/java/dev/marisol/helpdesk_software/
 
 ## 📬 Postman
 
-- Colección de endpoints creada y documentada en Postman.  
+- Colección de endpoints creada y documentada en Postman. (La puedes encontrar en docs/Helpdesk API.postman_collection)
 
 <img width="967" height="812" alt="Captura de pantalla 2025-09-05 125210" src="https://github.com/user-attachments/assets/0154de99-9a6a-4a61-8412-5bba8de9e359" />
 
