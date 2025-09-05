@@ -7,6 +7,7 @@ import dev.marisol.helpdesk_software.dtos.RequestDTOResponse;
 import dev.marisol.helpdesk_software.entities.RequestEntity;
 import dev.marisol.helpdesk_software.entities.TopicEntity;
 import dev.marisol.helpdesk_software.enums.RequestStatus;
+import dev.marisol.helpdesk_software.exceptions.RequestNotFoundException;
 import dev.marisol.helpdesk_software.repository.TopicRepository;
 
 @Component
@@ -24,7 +25,7 @@ public class RequestMapper {
         entity.setDescription(dto.description());
 
         TopicEntity topic = topicRepository.findById(dto.topicId())
-            .orElseThrow(() -> new IllegalArgumentException("Tema no encontrado: " + dto.topicId()));
+            .orElseThrow(() -> new RequestNotFoundException("Tema no encontrado: " + dto.topicId()));
         entity.setTopic(topic);
 
         entity.setStatus(RequestStatus.PENDING);

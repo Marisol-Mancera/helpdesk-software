@@ -1,0 +1,85 @@
+{
+	"info": {
+		"_postman_id": "ffaa1b30-8479-4ee0-ac8f-f4b5004f7b2b",
+		"name": "Helpdesk API",
+		"description": "Coleccion local para API Helpdesk (Spring boot)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "45994336"
+	},
+	"item": [
+		{
+			"name": "Requests",
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"applicantName\": \"María\",\r\n    \"topicId\": 1,\r\n    \"description\": \"No enciende el PC\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/requests",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"requests"
+							]
+						},
+						"description": "## Listar solicitudes\n\nEste endpoint devuelve todas las solicitudes registradas en el sistema.\n\n### Método HTTP\n\n**GET**\n\n### Endpoint\n\n```\nhttp://localhost:8080/api/v1/requests\n\n ```\n\n### Parámetros de entrada\n\nNo requiere parámetros en el cuerpo.  \n  \nOpcionalmente se puede usar `id` en la ruta para consultar un registro en específico (ver endpoint de detalle).\n\n  \n\nStartFragment\n\n### Respuestas\n\n#### ✅ 200 OK\n\nCuando existen solicitudes, devuelve un listado en formato JSON:\n\n```\n[\n  {\n    \"id\": 1,\n    \"applicantName\": \"María\",\n    \"topicName\": \"Hardware\",\n    \"description\": \"No enciende el PC\",\n    \"status\": \"PENDING\",\n    \"attendedBy\": null,\n    \"attendedAt\": null,\n    \"createdAt\": \"2025-09-05T14:33:21\",\n    \"updatedAt\": \"2025-09-05T14:33:21\"\n  },\n  {\n    \"id\": 2,\n    \"applicantName\": \"Carlos\",\n    \"topicName\": \"Software\",\n    \"description\": \"Error al abrir Excel\",\n    \"status\": \"ATTENDED\",\n    \"attendedBy\": \"Alice\",\n    \"attendedAt\": \"2025-09-05T15:10:00\",\n    \"createdAt\": \"2025-09-05T14:45:00\",\n    \"updatedAt\": \"2025-09-05T15:10:00\"\n  }\n]\n\n ```\n\n#### 204 No Content\n\nSi no existen solicitudes, devuelve un **204** sin cuerpo."
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"applicantName\": \"María\",\r\n    \"topicId\": 1,\r\n    \"description\": \"No enciende el PC\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/requests",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"requests"
+							]
+						},
+						"description": "StartFragment\n\n## Crear Solicitud\n\nEste endpoint permite a los usuarios **crear una nueva solicitud** enviando los detalles correspondientes.\n\n### Método HTTP\n\n**POST**\n\n### Endpoint\n\n``` java\nhttp://localhost:8080/api/v1/requests\n\n ```\n\nStartFragment\n\n### Cuerpo de la petición (Request Body)\n\nLa petición debe incluir un objeto **JSON** con los siguientes parámetros:\n\n- **applicantName** (string): Nombre de la persona que realiza la solicitud.\n    \n- **topicId** (integer): Identificador del tema relacionado con la solicitud.\n    \n- **description** (string): Descripción detallada del problema o solicitud.\n    \n\n#### Ejemplo de Request Body\n\n``` json\n{\n  \"id\": 0,\n  \"applicantName\": \"\",\n  \"topicName\": \"\",\n  \"description\": \"\",\n  \"status\": \"\",\n  \"attendedBy\": null,\n  \"attendedAt\": null,\n  \"createdAt\": \"\",\n  \"updatedAt\": \"\"\n}\n\n ```\n\nStartFragment\n\n### Respuesta\n\nAl crear la solicitud exitosamente, la API responderá con **201 Created** y devolverá un objeto JSON con los siguientes campos:\n\n- **id** (integer): Identificador único de la solicitud recién creada.\n    \n- **applicantName** (string): Nombre del solicitante.\n    \n- **topicName** (string): Nombre del tema asociado a la solicitud.\n    \n- **description** (string): Descripción ingresada en la solicitud.\n    \n- **status** (string): Estado actual de la solicitud.\n    \n- **attendedBy** (string o null): Nombre del técnico que atiende la solicitud, si aplica.\n    \n- **attendedAt** (string o null): Marca de tiempo en que la solicitud fue atendida, si aplica.\n    \n- **createdAt** (string): Marca de tiempo de creación de la solicitud.\n    \n- **updatedAt** (string): Marca de tiempo de la última actualización.\n    \n    **Ejemplo de respuesta**\n    \n\n``` json\n{  \"id\": 1,  \n\"applicantName\": \"María\",  \n\"topicName\": \"Hardware\",  \n\"description\": \"No enciende el PC\",  \n\"status\": \"PENDING\",  \n\"attendedBy\": null,  \n\"attendedAt\": null,  \n\"createdAt\": \"2025-09-05T12:00:00\",  \n\"updatedAt\": \"2025-09-05T12:00:00\"}\n\n ```"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

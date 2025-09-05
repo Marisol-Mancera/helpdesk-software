@@ -54,7 +54,6 @@ public class RequestMapperTest {
     @Test
     @DisplayName("toDTO should map fields correctly")
     void toDTOShouldMapFields() {
-        // arrange
         TopicEntity topic = new TopicEntity();
         topic.setId(1L);
         topic.setName("Software");
@@ -70,10 +69,8 @@ public class RequestMapperTest {
         entity.setCreatedAt(LocalDateTime.now().minusDays(1));
         entity.setUpdatedAt(LocalDateTime.now());
 
-        // act
         RequestDTOResponse dto = mapper.toDTO(entity);
 
-        // assert
         assertThat(dto.id(), is(5L));
         assertThat(dto.applicantName(), is("Carlos"));
         assertThat(dto.topicName(), is("Software"));

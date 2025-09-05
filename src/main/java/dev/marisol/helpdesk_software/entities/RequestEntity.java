@@ -27,7 +27,7 @@ public class RequestEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false, unique = true, length = 120)
+    @Column(nullable = false, length = 120)
     private String applicantName;
 
     @Column(nullable = false, columnDefinition = "TEXT")
