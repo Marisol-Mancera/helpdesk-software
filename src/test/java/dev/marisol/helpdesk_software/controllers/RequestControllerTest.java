@@ -10,17 +10,23 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 
 import dev.marisol.helpdesk_software.dtos.RequestDTORequest;
@@ -159,4 +165,146 @@ public class RequestControllerTest {
                                 .andExpect(status().isConflict());
         }
 
+        @Test
+        @DisplayName("GET should return 200 with list")
+        public void getIndexShouldReturn200WithList() throws Exception {
+                RequestDTOResponse a = new RequestDTOResponse(1L, "María", "Hardware", "Desc A", "PENDING", null, null,
+                                null, null);
+                RequestDTOResponse b = new RequestDTOResponse(2L, "Luis", "Software", "Desc B", "PENDING", null, null,
+                                null, null);
+                when(requestService.getEntities()).thenReturn(List.of(a, b));
+
+                MockHttpServletResponse response = mockMvc.perform(get("/api/v1/requests"))
+                                .andExpect(status().isOk())
+                                .andReturn()
+                                .getResponse();
+
+                assertThat(response.getContentAsString(), containsString("María"));
+                assertThat(response.getContentAsString(), containsString("Luis"));
+        }
+
+        @Test
+        @DisplayName("GET should return 204 when empty")
+        public void getIndexShouldReturn204WhenEmpty() throws Exception {
+                when(requestService.getEntities()).thenReturn(List.of());
+
+                mockMvc.perform(get("/api/v1/requests"))
+                                .andExpect(status().isNoContent());
+        }
+
+        @Test
+        @DisplayName("GET by id should return 200 with item")
+        public void showShouldReturn200() throws Exception {
+                Long id = 7L;
+                RequestDTOResponse dto = new RequestDTOResponse(id, "María", "Hardware", "No enciende", "PENDING", null,
+                                null, null, null);
+                when(requestService.showById(id)).thenReturn(dto);
+
+                MockHttpServletResponse response = mockMvc.perform(get("/api/v1/requests/{id}", id))
+                                .andExpect(status().isOk())
+                                .andReturn()
+                                .getResponse();
+
+                assertThat(response.getContentAsString(), containsString("\"id\":" + id));
+                assertThat(response.getContentAsString(), containsString("María"));
+        }
+
+        // GET by id 404
+        @Test
+        @DisplayName("GET by id should return 404 when not found")
+        public void showShouldReturn404WhenNotFound() throws Exception {
+                when(requestService.showById(anyLong()))
+                                .thenThrow(new RequestNotFoundException("Solicitud no encontrada"));
+
+                mockMvc.perform(get("/api/v1/requests/{id}", 999L))
+                                .andExpect(status().isNotFound());
+        }
+
+        // PATCH attend 400 (falta parámetro)
+        @Test
+        @DisplayName("PATCH should return 400 when technicianName is missing")
+        public void attendShouldReturn400WhenTechnicianMissing() throws Exception {
+                mockMvc.perform(patch("/api/v1/requests/{id}/attend", 1L))
+                                .andExpect(status().isBadRequest());
+        }
+
+        // PATCH attend 404
+        @Test
+        @DisplayName("PATCH should return 404 when request not found")
+        public void attendShouldReturn404WhenNotFound() throws Exception {
+                doThrow(new RequestNotFoundException("Solicitud no encontrada"))
+                                .when(requestService).markAsAttended(eq(1L), any());
+
+                mockMvc.perform(patch("/api/v1/requests/{id}/attend", 1L)
+                                .param("technicianName", "Alice"))
+                                .andExpect(status().isNotFound());
+        }
+
+        // PATCH attend 409
+        @Test
+        @DisplayName("PATCH should return 409 when already attended")
+        public void attendShouldReturn409WhenAlreadyAttended() throws Exception {
+                doThrow(new RequestConflictException("La solicitud ya está marcada como atendida"))
+                                .when(requestService).markAsAttended(eq(1L), any());
+
+                mockMvc.perform(patch("/api/v1/requests/{id}/attend", 1L)
+                                .param("technicianName", "Alice"))
+                                .andExpect(status().isConflict());
+        }
+
+        // PUT update 200
+        @Test
+        @DisplayName("PUT should return 200 with updated payload")
+        public void updateShouldReturn200WithPayload() throws Exception {
+                Long id = 3L;
+                RequestDTORequest body = new RequestDTORequest("María", 1L, "Cambia pantalla");
+                String json = mapper.writeValueAsString(body);
+
+                RequestDTOResponse updated = new RequestDTOResponse(
+                                id, "María", "Hardware", "Cambia pantalla", "PENDING", null, null, null, null);
+
+                when(requestService.update(eq(id), any(RequestDTORequest.class))).thenReturn(updated);
+
+                MockHttpServletResponse resp = mockMvc.perform(
+                                put("/api/v1/requests/{id}", id)
+                                                .contentType("application/json")
+                                                .content(json))
+                                .andExpect(status().isOk())
+                                .andReturn()
+                                .getResponse();
+
+                assertThat(resp.getContentAsString(), containsString("Cambia pantalla"));
+        }
+
+        // PUT update 404
+        @Test
+        @DisplayName("PUT should return 404 when request not found")
+        public void updateShouldReturn404WhenNotFound() throws Exception {
+                Long id = 999L;
+                RequestDTORequest body = new RequestDTORequest("María", 1L, "Texto");
+                String json = mapper.writeValueAsString(body);
+
+                when(requestService.update(eq(id), any(RequestDTORequest.class)))
+                                .thenThrow(new RequestNotFoundException("Solicitud no encontrada"));
+
+                mockMvc.perform(
+                                put("/api/v1/requests/{id}", id)
+                                                .contentType("application/json")
+                                                .content(json))
+                                .andExpect(status().isNotFound());
+        }
+
+        // PUT update 400 (validación)
+        @Test
+        @DisplayName("PUT should return 400 when validation fails")
+        public void updateShouldReturn400WhenValidationFails() throws Exception {
+                RequestDTORequest invalid = new RequestDTORequest("", 1L, "desc");
+                String json = mapper.writeValueAsString(invalid);
+
+                mockMvc.perform(
+                                put("/api/v1/requests/{id}", 5L)
+                                                .contentType("application/json")
+                                                .content(json))
+                                .andExpect(status().isBadRequest());
+        }
 }

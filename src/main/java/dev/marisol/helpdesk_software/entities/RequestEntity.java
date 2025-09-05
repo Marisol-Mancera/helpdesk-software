@@ -102,7 +102,7 @@ public class RequestEntity{
         return topic;
     }
 
-    protected void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -118,7 +118,7 @@ public class RequestEntity{
         return attendedAt;
     }
 
-    protected void setUpdatedAt(LocalDateTime updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
