@@ -106,49 +106,25 @@ src/test/java/dev/marisol/helpdesk_software/
 
 - **Diagrama Relacional (Patas de gallo)**
 - **Diagrama ER (Chen)**
-flowchart LR
-  %% ==== ENTIDADES ====
-  TOPIC[/"Entity: TOPIC"/]
-  REQUEST[/"Entity: REQUEST"/]
+erDiagram
+  TOPIC ||--o{ REQUEST : "has"
+  TOPIC {
+    BIGINT id PK
+    VARCHAR name "UNIQUE NOT NULL"
+    BOOLEAN active "NOT NULL DEFAULT true"
+  }
+  REQUEST {
+    BIGINT id PK
+    BIGINT topicId FK "REFERENCES TOPIC(id) NOT NULL"
+    VARCHAR applicantName "NOT NULL"
+    TEXT description "NOT NULL"
+    ENUM status "PENDING|ATTENDED DEFAULT PENDING"
+    TIMESTAMP createdAt "DEFAULT now()"
+    TIMESTAMP updatedAt
+    TIMESTAMP attendedAt
+    VARCHAR attendedBy
+  }
 
-  %% ==== ATRIBUTOS TOPIC ====
-  T_id(((id {PK})))
-  T_name(((name {UNIQUE})))
-  T_active(((active)))
-  T_id --- TOPIC
-  T_name --- TOPIC
-  T_active --- TOPIC
-
-  %% ==== ATRIBUTOS REQUEST ====
-  R_id(((id {PK})))
-  R_applicant(((applicantName)))
-  R_desc(((description)))
-  R_status(((status {PENDING|ATTENDED})))
-  R_created(((createdAt)))
-  R_updated(((updatedAt)))
-  R_attAt(((attendedAt)))
-  R_attBy(((attendedBy)))
-  R_id --- REQUEST
-  R_applicant --- REQUEST
-  R_desc --- REQUEST
-  R_status --- REQUEST
-  R_created --- REQUEST
-  R_updated --- REQUEST
-  R_attAt --- REQUEST
-  R_attBy --- REQUEST
-
-  %% ==== RELACIÓN CHEN ====
-  BELONGS{{BELONGS_TO}}
-  REQUEST --- BELONGS
-  BELONGS --- TOPIC
-
-  %% Cardinalidades (texto auxiliar)
-  C1((0..N)):::card
-  C2((1)):::card
-  C1 -.-> REQUEST
-  C2 -.-> TOPIC
-
-  classDef card fill:#fff,stroke:#999,stroke-dasharray: 3 3,color:#333;
 
 ---
 
