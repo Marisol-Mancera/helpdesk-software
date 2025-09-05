@@ -93,27 +93,73 @@ src/test/java/dev/marisol/helpdesk_software/
   - `RequestControllerTest`
 - **Frameworks:** JUnit 5, Mockito, Hamcrest.
 
-👉 _Espacio para añadir captura de cobertura:_  
-![Coverage Report](./assets/coverage.png)
+
+<img width="317" height="311" alt="Captura de pantalla 2025-09-05 121259" src="https://github.com/user-attachments/assets/dc5994ed-7924-418b-95de-b7c0dd0927b6" />
 
 ---
 
 ## 🗃️ Diagramas
 
-👉 _Espacio para añadir:_
-- **Diagrama ER (Chen)**
-- **Diagrama Relacional (Patas de gallo)**
 - **Diagrama de clases (Mermaid o UML)**
+
+<img width="1219" height="828" alt="Captura de pantalla 2025-09-05 125946" src="https://github.com/user-attachments/assets/1f25f7ed-6992-430d-bd88-0c24b01c4503" />
+
+- **Diagrama Relacional (Patas de gallo)**
+- **Diagrama ER (Chen)**
+flowchart LR
+  %% ==== ENTIDADES ====
+  TOPIC[/"Entity: TOPIC"/]
+  REQUEST[/"Entity: REQUEST"/]
+
+  %% ==== ATRIBUTOS TOPIC ====
+  T_id(((id {PK})))
+  T_name(((name {UNIQUE})))
+  T_active(((active)))
+  T_id --- TOPIC
+  T_name --- TOPIC
+  T_active --- TOPIC
+
+  %% ==== ATRIBUTOS REQUEST ====
+  R_id(((id {PK})))
+  R_applicant(((applicantName)))
+  R_desc(((description)))
+  R_status(((status {PENDING|ATTENDED})))
+  R_created(((createdAt)))
+  R_updated(((updatedAt)))
+  R_attAt(((attendedAt)))
+  R_attBy(((attendedBy)))
+  R_id --- REQUEST
+  R_applicant --- REQUEST
+  R_desc --- REQUEST
+  R_status --- REQUEST
+  R_created --- REQUEST
+  R_updated --- REQUEST
+  R_attAt --- REQUEST
+  R_attBy --- REQUEST
+
+  %% ==== RELACIÓN CHEN ====
+  BELONGS{{BELONGS_TO}}
+  REQUEST --- BELONGS
+  BELONGS --- TOPIC
+
+  %% Cardinalidades (texto auxiliar)
+  C1((0..N)):::card
+  C2((1)):::card
+  C1 -.-> REQUEST
+  C2 -.-> TOPIC
+
+  classDef card fill:#fff,stroke:#999,stroke-dasharray: 3 3,color:#333;
 
 ---
 
 ## 📬 Postman
 
 - Colección de endpoints creada y documentada en Postman.  
-- Exportar la colección en formato `.json` y adjuntar al proyecto.
 
-👉 _Espacio para añadir captura de Postman:_  
-![Postman Screenshot](./assets/postman.png)
+<img width="967" height="812" alt="Captura de pantalla 2025-09-05 125210" src="https://github.com/user-attachments/assets/0154de99-9a6a-4a61-8412-5bba8de9e359" />
+
+<img width="962" height="871" alt="Captura de pantalla 2025-09-05 125303" src="https://github.com/user-attachments/assets/39b20dc4-12d9-4041-8888-7f5858530bff" />
+
 
 ---
 
