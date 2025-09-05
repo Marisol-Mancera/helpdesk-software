@@ -104,30 +104,6 @@ src/test/java/dev/marisol/helpdesk_software/
 
 <img width="1219" height="828" alt="Captura de pantalla 2025-09-05 125946" src="https://github.com/user-attachments/assets/1f25f7ed-6992-430d-bd88-0c24b01c4503" />
 
-- **Diagrama Relacional (Patas de gallo)**
-- **Diagrama ER (Chen)**
-erDiagram
-  TOPIC ||--o{ REQUEST : "has"
-  TOPIC {
-    BIGINT id PK
-    VARCHAR name "UNIQUE NOT NULL"
-    BOOLEAN active "NOT NULL DEFAULT true"
-  }
-  REQUEST {
-    BIGINT id PK
-    BIGINT topicId FK "REFERENCES TOPIC(id) NOT NULL"
-    VARCHAR applicantName "NOT NULL"
-    TEXT description "NOT NULL"
-    ENUM status "PENDING|ATTENDED DEFAULT PENDING"
-    TIMESTAMP createdAt "DEFAULT now()"
-    TIMESTAMP updatedAt
-    TIMESTAMP attendedAt
-    VARCHAR attendedBy
-  }
-
-
----
-
 ## 📬 Postman
 
 - Colección de endpoints creada y documentada en Postman.  
